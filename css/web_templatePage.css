@@ -1,0 +1,36 @@
+@font-face {
+	font-family: 'MyNewFont';   /*字体名称*/
+	src: url('./font/font.TTF');       /*字体源文件*/
+	font-family: 'birthday';   /*字体名称*/
+	src: url('./font/FZKATJW--GB1-0.ttf');       /*字体源文件*/
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+body{
+	background-color: #efefef;
+}
+.templatePage {
+	width: 16rem;
+	margin: 0 auto;
+}
+.temp-page {
+	width: 16rem;
+	position: relative;
+}
+.temp-page>div {
+	position: absolute;
+	overflow: hidden;
+}
+.loading-small {
+	position:absolute;
+	left:50%;
+	width:1.5rem;
+	height:1.5rem;
+	background:url("../images/loading-l.gif") no-repeat left;
+	-webkit-background-size: 100% 100%;
+	background-size: 100% 100%;
+	margin:0.5rem 0 0.5rem -0.75rem;
+	z-index:9999;
+}

@@ -1,0 +1,72 @@
+@font-face {
+	font-family: 'MyNewFont';   /*字体名称*/
+	src: url('./font/font.TTF');       /*字体源文件*/
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+.studentList {
+	margin: 0 auto;
+}
+.footer {
+	position: fixed;
+	left: 0rem;
+	bottom: 0rem;
+}
+.footer>a {
+	display: block;
+}
+.footer>a>button {
+	background-color: #f0efed;
+	width: 16rem;
+	height: 2.45rem;
+	color: #b8b8b6;
+	border: none;
+	font-size: 0.75rem;
+	font-family: MyNewFont;
+}
+.header, .student {
+	text-decoration: none;
+	float: left;
+	line-height: 0;
+	display: block;
+	width: 5.33rem;
+	height: 5.2rem;
+	outline: solid #f0efed;
+	outline-width: 0.05rem;
+	margin-top: 0.05rem;
+	margin-bottom: 0.05rem;
+	position: relative;
+}
+.student_hp {
+	top: 0.5rem;
+	width: 3rem;
+	height: 3rem;
+	margin: 0 auto;
+	position: relative;
+	border-radius: 100rem;
+	line-height: 3rem;
+	text-align: center;
+}
+.student_name {
+	top: 1.2rem;
+	width: 5rem;
+	height: 2rem;
+	text-align: center;
+	position: relative;
+	font-size: 0.7rem;
+	font-family: MyNewFont;
+}
+.student_name>h5 {
+	top: 1rem;
+}
+.checkAll, .check {
+	float: right;
+}
+.checkAll, .check, .checkAll>img, .check>img {
+	width: 1rem;
+	height: 1rem;
+	margin-right: 0.2rem;
+	margin-top: 0.1rem;
+}

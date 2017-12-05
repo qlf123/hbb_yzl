@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cruisecontrol>
+  <info>
+    <property name="logdir" value="/var/lib/go-agent/pipelines/web_czda_yidong/cruise-output" />
+    <property name="logfile" value="log.xml" />
+  </info>
+  <build time="0 minute(s) 0 second(s)">
+    <target name="exec">
+      <task name="/opt/script/hbb_yzl_web.sh" />
+    </target>
+  </build>
+</cruisecontrol>
+

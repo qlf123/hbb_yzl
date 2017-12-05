@@ -1,0 +1,99 @@
+@font-face {
+	font-family: 'MyNewFont';   /*字体名称*/
+	src: url('./font/font.TTF');       /*字体源文件*/
+}
+p {
+	font-family: MyNewFont;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+a {
+	text-decoration: none;
+}
+.topTheme {
+	width: 16rem;
+	height: 9rem;
+	margin: 0 auto;
+}
+.subTheme {
+	width: 16rem;
+	margin: 0 auto;
+	position: absolute;
+}
+.myProduct {
+	right: 0rem;
+	bottom: 0rem;
+	position: fixed;
+	width: 3.95rem;
+	height: 5.55rem;
+	background: url("../images/teacher_07.png") no-repeat right;
+	-webkit-background-size: 100% 100%;
+	background-size: 100% 100%;
+	z-index: 1000;
+}
+.topTheme>a {
+	display: block;
+	line-height: 0;
+	font-family: MyNewFont;
+}
+.subTheme>a {
+	display: block;
+	line-height: 0;
+	width: 8rem;
+	float: left;
+	font-family: MyNewFont;
+}
+.myProduct>a {
+	width: 3.95rem;
+	height: 5.55rem;
+	display: block;
+	z-index: 1000;
+}
+.myProduct>p {
+	position: absolute;
+	right: 0rem;
+	top: 2.4rem;
+	font-size: 0.6rem;
+	pointer-events: none;
+}
+.topTheme>a>h2, .subTheme>a>h2 {
+	text-align: center;
+	font-size: 1rem;
+	color: #fff;
+	z-index: 999;
+	text-decoration: none;
+}
+#yhx-unread {
+	position: absolute;
+	top: 1.8rem;
+	left: 1rem;
+	width: 0.6rem;
+	height: 0.6rem;
+}
+#yhx-size {
+	position: absolute;
+	top: 1.8rem;
+	left: 1.05rem;
+	color: #fff;
+	font-size: 0.1rem;
+}
+.bg-mask {
+	overflow: hidden;
+	background: #000;
+	width: 16rem;
+	height: 100%;
+	filter: alpha(Opacity=35);
+	-moz-opacity: 0.35;
+	opacity: 0.35;
+	z-index: 998;
+	position: fixed;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+.img-designimg{
+	width:6rem;
+	height:1.25rem;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>选择生日</title>
+    <script src="../src/jquery.min.js"></script>
+    <script src="../js/birthday/core.js" type="text/javascript"></script>
+    <!--模态框的css-->
+    <link href="../css/birthday.css" rel="stylesheet" type="text/css" />
+    <script src="../js/birthday/zh.js" type="text/javascript"></script>
+    <script src="../js/birthday/datetime.js" type="text/javascript"></script>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c61c977737527e8ddfc9b1a1276684bf";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+</head>
+
+<body>
+    <div id="birLabel">
+        <label>请选择孩子的生日：</label><br/>
+    </div>
+    <input id="birthday"/>
+    <script type="text/javascript">
+        $(function () {
+            //alert('yhx-page:'+localStorage.studentBirthday);
+            $('#birthday').val(localStorage.studentBirthday).scroller('destroy').scroller($.extend({ preset: 'date' }, { theme: "android-ics light", mode: "scroller", display: "modal", lang: "zh" }));
+            $('#birthday').focus().submit();
+        });
+    </script>
+</body>
+</html>
