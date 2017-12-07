@@ -1,19 +1,58 @@
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8"/>
 	<meta http-equiv="Access-Control-Allow-Origin"content="*">
-	<meta id="viewport"name="viewport"content="width=device-width,minimum-scale=1,maximum-scale=1">
+	<meta id="viewport" name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 	<title>制作模板</title>
-	<link rel="stylesheet"type="text/css"href="../css/web_templatePage.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/web_templatePage.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/default.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/bookblock.css"/>
+	<!--<link rel="stylesheet" type="text/css" href="../css/demo1.css"/>-->
+	<style>
+		#wrap {
+			min-width: 750px;
+			width: 800px;
+			margin: 0 auto;
+			position: relative;
+		}
+		#bb-nav-prev {
+			position: absolute;
+			top: 300px;
+			width: 64px;
+			height: 64px;
+			background: url('../images/icon_left_arr.png');
+			background-size: cover;
+		}
+		#bb-nav-next {
+			position: absolute;
+			top: 300px;
+			right: 0;
+			width: 64px;
+			height: 64px;
+			background: url('../images/icon_right_arr.png');
+			background-size: cover;
+		}
+	</style>
 </head>
 <body>
-	<div class="templatePage"></div>
-	<script type="text/javascript"src="../src/web_rem.js"></script>
+<div id="wrap">
+	<div id="bb-bookblock" class="templatePage bb-bookblock"></div>
+	<nav>
+		<!--<a id="bb-nav-first" href="#" class="bb-custom-icon bb-custom-icon-first">First page</a>-->
+		<a id="bb-nav-prev" href="#" class="bb-cuscustomtom-icon bb-custom-icon-arrow-left"></a>
+		<a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right"></a>
+		<!--<a id="bb-nav-last" href="#" class="bb-custom-icon bb-custom-icon-last">Last page</a>-->
+	</nav>
+</div>
+	<script type="text/javascript" src="../src/web_rem.js"></script>
 	<script src="../src/jquery.min.js"></script>
 	<script src="../src/customParam.js"></script>
-	<script type="text/javascript"src="../js/configure.js"></script>
-	<script type="text/javascript"src="../js/templatePage/web_templatePage.js"></script>
-	<script type="text/javascript"src="../js/templatePage/web_template.js"></script>
+	<script type="text/javascript" src="../js/configure.js"></script>
+	<script src="../js/templatePage/modernizr.custom.js"></script>
+	<script src="../js/templatePage/jquerypp.custom.js"></script>
+	<script src="../js/templatePage/jquery.bookblock.js"></script>
+	<script type="text/javascript" src="../js/templatePage/web_templatePage.js"></script>
+	<script type="text/javascript" src="../js/templatePage/web_template.js"></script>
 </body>
 </html>

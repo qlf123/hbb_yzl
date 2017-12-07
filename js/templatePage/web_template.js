@@ -1,5 +1,7 @@
+
 //模板页
 function Template(opts) {
+	var _this = this;
 	this.opts = opts;
 	this.currentPage = 0;
 	this.obj; //页面数据
@@ -12,8 +14,84 @@ function Template(opts) {
 	this.angel = 0; //图片角度
 	this.totalPages; //总页数
 	this.rate;
-}
+	this.page = (function() {
+		var config = {
+				$bookBlock : $( '#bb-bookblock' ),
+				$navNext : $( '#bb-nav-next' ),
+				$navPrev : $( '#bb-nav-prev' ),
+				$navFirst : $( '#bb-nav-first' ),
+				$navLast : $( '#bb-nav-last' )
+			},
+			init = function() {
+				config.$bookBlock.bookblock( {
+					speed : 800,
+					shadowSides : 0.8,
+					shadowFlip : 0.7
+				} );
+				initEvents();
+			},
+			initEvents = function() {
 
+				var $slides = config.$bookBlock.children();
+
+				// add navigation events
+				config.$navNext.on( 'click touchstart', function() {
+					_this.loadAlbum();
+					config.$bookBlock.bookblock('update');
+					config.$bookBlock.bookblock('next');
+					return false;
+				} );
+
+				config.$navPrev.on( 'click touchstart', function() {
+					config.$bookBlock.bookblock( 'prev' );
+					return false;
+				} );
+
+				config.$navFirst.on( 'click touchstart', function() {
+					config.$bookBlock.bookblock( 'first' );
+					return false;
+				} );
+
+				config.$navLast.on( 'click touchstart', function() {
+					config.$bookBlock.bookblock( 'last' );
+					return false;
+				} );
+
+				// add swipe events
+				$slides.on( {
+					'swipeleft' : function( event ) {
+						config.$bookBlock.bookblock( 'next' );
+						return false;
+					},
+					'swiperight' : function( event ) {
+						config.$bookBlock.bookblock( 'prev' );
+						return false;
+					}
+				} );
+
+				// add keyboard events
+				$( document ).keydown( function(e) {
+					var keyCode = e.keyCode || e.which,
+						arrow = {
+							left : 37,
+							up : 38,
+							right : 39,
+							down : 40
+						};
+
+					switch (keyCode) {
+						case arrow.left:
+							config.$bookBlock.bookblock( 'prev' );
+							break;
+						case arrow.right:
+							config.$bookBlock.bookblock( 'next' );
+							break;
+					}
+				} );
+			};
+		return { init : init };
+	})();
+}
 Template.prototype = {
 	//-----------------------------------获取页面----------------------------------------
 	getPage: function() {
@@ -50,7 +128,7 @@ Template.prototype = {
 		for (var i = 0; i < length; i++) {
 			this.album.push(this.obj[i]);
 			this.pageId = 'temp-' + this.obj[i].pageIndex;
-			var div = '<div class="temp-page"><div id="' + this.pageId + '"></div></div>';
+			var div = '<div class="temp-page bb-item"><div id="' + this.pageId + '"></div></div>';
 			$(this.opts.container).append(div);
 			this.eachPage(this.obj[i]);
 		}
@@ -237,7 +315,7 @@ Template.prototype = {
 	loadPage: function() {
 		var _this = this;
 		var height = 0; //dom高
-		var diffHeight = $('.temp-page').height() * 2; //计算存在问题
+		var diffHeight = $('.temp-page').height() * 1; //计算存在问题
 		height += diffHeight;
 		var clientH = $(window).height();
 		$(window).scroll(function() {
@@ -255,4 +333,13 @@ Template.prototype = {
 			}
 		});
 	},
+	loadAlbum: function() {
+		var _this = this;
+		console.log('总数----------' + _this.totalPages)
+		if (_this.currentPage < _this.totalPages - 1) {
+			_this.currentPage++;
+			console.log(_this.currentPage)
+			_this.getPage();
+		}
+	}
 };

@@ -1,9 +1,10 @@
+
 //获取模板具体页
 $(function() {
 	domain = configure();
 	opts = {
 		domain: domain.domain,
-		pageSize: 2,
+		pageSize: 2, //TODO:12-5 做翻书效果，每次加载一张也可
 		currentPage: 0,
 		picurl: domain.imgServerUri,
 		container: '.templatePage',
@@ -28,6 +29,6 @@ $(function() {
 	var temp = new Template(opts);
 	temp.getPage();
 	setTimeout(function() {
-		temp.loadPage();
-	}, 500);
+		temp.page.init();
+	}, 500)
 });
