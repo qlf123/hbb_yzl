@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta id="viewport" name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+	<title>学生列表</title>
+	<link rel="stylesheet" type="text/css" href="../src/bootstrap.min.css" />
+	<style>
+		@font-face {
+			font-family: 'MyNewFont';   /*字体名称*/
+			src: url('../css/font/font.TTF');       /*字体源文件*/
+		}
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		.footer {
+			position: fixed;
+			left: 0rem;
+			bottom: 0rem;
+		}
+		.footer>a {
+			display: block;
+		}
+		.footer>a>button {
+			background-color: #f0efed;
+			width: 16rem;
+			height: 2.45rem;
+			color: #b8b8b6;
+			border: none;
+			font-size: 0.75rem;
+			font-family: MyNewFont;
+		}
+		.header, .student {
+			float: left;
+			line-height: 0;
+			display: block;
+			width: 150px;
+			height: 150px;
+			color: #fff;
+			font-size: 16px;
+		}
+		.student_hp {
+			width: 100px;
+			height: 100px;
+			margin: 25px auto;
+			border-radius: 50px;
+			line-height: 100px;
+			text-align: center;
+			background: #B9D5A5;
+			box-sizing: border-box;
+		}
+		.btn {
+			display: inline-block;
+			background-color: #7ca4d6;
+			border-color: #7ca4d6;
+			color: #fff!important;
+			float: right;
+			margin-right: 20px;
+			margin-top: 8px;
+		}
+	</style>
+</head>
+<body>
+	<div id="tabNav" style="height: 50px;background: #F9F9F9; box-sizing: border-box; border-bottom: 1px solid #ddd;font-size: 16px;line-height: 50px;padding-left: 25px;">
+		选择学生
+		<span class="btn">开始制作</span>
+	</div>
+	<div class="studentList">		
+	</div>
+	<script type="text/javascript" src="../src/rem.js"></script>
+	<script src="../src/jquery.min.js"></script>
+	<script src="../src/bootstrap.min.js"></script>
+	<script src="../src/customParam.js"></script>
+	<script type="text/javascript" src="../js/configure.js"></script>
+	<script src="../js/stuList/web_stuList.js"></script>
+	<script src="../js/stuList/web_student.js"></script>
+</body>
+</html>

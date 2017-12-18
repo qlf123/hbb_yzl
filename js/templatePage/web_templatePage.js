@@ -9,7 +9,8 @@ $(function() {
 		picurl: domain.imgServerUri,
 		container: '.templatePage',
 		zimgUri: domain.tempUri, //模板/作品图片服务器地址
-		opusuri: 'outeropus/read/pageinfos'
+		opusuri: 'outeropus/read/pageinfos',
+		removeOpusuri: 'outeropus/remove/opus'
 	};
 	opts.redomain = opts.domain.split('j')[0];
 	//查看作品
@@ -22,12 +23,20 @@ $(function() {
 			var arr2 = arr[i].split('=');
 			data.push(arr2);
 		}
+		console.log('参数------------' + data)
 		localStorage.opusId = data[0][1];
 		localStorage.token = data[1][1];
+		if(!data[2]){
+			console.log('园长进入')
+			$('#header').hide()
+		} else {
+			console.log('教师进入')
+		}
 	}
 	opts.opusId = localStorage.opusId
 	var temp = new Template(opts);
 	temp.getPage();
+	temp.pageOnClick();
 	setTimeout(function() {
 		temp.page.init();
 	}, 500)

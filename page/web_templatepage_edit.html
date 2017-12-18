@@ -3,13 +3,11 @@
 <head>
 	<meta charset="UTF-8"/>
 	<meta http-equiv="Access-Control-Allow-Origin"content="*">
-	<meta id="viewport" name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+	<meta id="viewport"name="viewport"content="width=device-width,minimum-scale=1,maximum-scale=1">
 	<title>制作模板</title>
 	<link rel="stylesheet" type="text/css" href="../css/web_templatePage.css"/>
-	<!--<link rel="stylesheet" type="text/css" href="../css/default.css"/>-->
 	<link rel="stylesheet" type="text/css" href="../css/bookblock.css"/>
-	<link rel="stylesheet" type="text/css" href="../src/bootstrap.min.css" />
-	<!--<link rel="stylesheet" type="text/css" href="../css/demo1.css"/>-->
+	<link rel="stylesheet" type="text/css" href="../src/bootstrap.min.css"/>
 	<style>
 		body {
 			background: #fff!important;
@@ -59,7 +57,7 @@
 		}
 		#header a {
 			display: inline-block;
-			margin-right: 160px;
+			margin-right: 270px;
 		}
 		#header a:last-child {
 			margin-right: 0;
@@ -81,6 +79,39 @@
 		.modal-header {
 			padding: 20px;
 		}
+		/*照片列表*/
+		#yhx-photoList {
+			width: 100%;
+		}
+		#yhx-photoList>.modal-dialog {
+			width: 80%;
+			max-width: 80%;
+			margin: 20px auto;
+			height: 500px;
+		}
+		.photoList {
+			float: left;
+			width:120px;
+			height: 120px;
+			margin-right: 5px;
+			margin-bottom: 5px;
+			box-sizing: border-box;
+			border: 1px solid #ddd;
+		}
+		#yhx-photo-footer {
+			overflow: auto;
+		}
+		#yhx-photo-footer .yhx-show {
+			height: 460px;
+			overflow: auto;
+		}
+		#upload {
+			margin-top: 15px;
+			border-top: 1px solid #ddd;
+			width: 100%;
+			background: #fff;
+			height: 80px;
+		}
 	</style>
 </head>
 <body>
@@ -90,8 +121,8 @@
 <div id="content">
 	<div id="header">
 		<div>
-			<a id="btn-edit" href="javascript:;">
-				<img src="../images/icon_edit.png">
+			<a id="btn-save" href="javascript:;">
+				<img src="../images/icon_save.png">
 			</a>
 			<a id="btn-share" href="javascript:;">
 				<img src="../images/icon_share.png">
@@ -99,20 +130,16 @@
 			<a id="btn-print" href="javascript:;">
 				<img src="../images/icon_print.png">
 			</a>
-			<a id="btn-delete">
-				<img src="../images/icon_delete.png">
-			</a>
 		</div>
 	</div>
 	<div id="wrap">
 		<div id="bb-bookblock" class="templatePage bb-bookblock"></div>
 		<nav>
-			<!--<a id="bb-nav-first" href="#" class="bb-custom-icon bb-custom-icon-first">First page</a>-->
-			<a id="bb-nav-prev" href="#" class="bb-cuscustomtom-icon bb-custom-icon-arrow-left"></a>
-			<a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right"></a>
-			<!--<a id="bb-nav-last" href="#" class="bb-custom-icon bb-custom-icon-last">Last page</a>-->
+			<a id="bb-nav-prev" class="bb-cuscustomtom-icon bb-custom-icon-arrow-left"></a>
+			<a id="bb-nav-next" class="bb-custom-icon bb-custom-icon-arrow-right"></a>
 		</nav>
 	</div>
+	<!--分享、打印等操作的弹框-->
 	<div class="modal fade" id="warn" tabindex="-1" role="dialog"  aria-hidden="true">
 		<div class="modal-dialog" style="top:8rem;">
 			<div class="modal-content">
@@ -123,17 +150,40 @@
 			</div>
 		</div>
 	</div>
+	<!--照片列表-->
+	<div  class="modal fade" id="yhx-photoList" tabindex="-1" role="dialog"  aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="border:none;border-radius:0;">
+				<div class="modal-header" style="border:none;padding:0;height:1rem;">
+					<button class="close" style="margin-right:0.2rem;font-size:1.4rem;color:#ff4f4f;" aria-hidden="true" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-footer" id="yhx-photo-footer">
+
+				</div>
+				<div id="upload">
+					111111111111
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+	<!-- <div class="yhx_loading"></div> -->
 	<script type="text/javascript" src="../src/web_rem.js"></script>
+	<script type="text/javascript" src="../js/modal.js"></script>
 	<script src="../src/jquery.min.js"></script>
 	<script src="../src/bootstrap.min.js"></script>
 	<script src="../src/customParam.js"></script>
+	<script type="text/javascript" src="../js/tool/dialog.js"></script>
+	<script type="text/javascript" src="../js/tool/xback.js"></script>
+	<script type="text/javascript" src="../js/tool/browser.js"></script>
 	<script type="text/javascript" src="../js/configure.js"></script>
 	<script src="../js/templatePage/modernizr.custom.js"></script>
 	<script src="../js/templatePage/jquerypp.custom.js"></script>
-	<script src="../js/templatePage/jquery.bookblock.js"></script>
+	<script type="text/javascript" src="../js/templatePage/jquery.bookblock.js"></script>
 	<script type="text/javascript" src="../js/tool/qrcode.js"></script>
-	<script type="text/javascript" src="../js/templatePage/web_templatePage.js"></script>
-	<script type="text/javascript" src="../js/templatePage/web_template.js"></script>
+	<script type="text/javascript" src="../js/templatePage/web_templatePage_edit.js"></script>
+	<script type="text/javascript" src="../js/templatePage/web_template_edit.js"></script>
+	<script type="text/javascript" src="../src/alb.draggable.js"></script>
+	<script type="text/javascript" src="../src/alb.resize.js"></script>
 </body>
 </html>

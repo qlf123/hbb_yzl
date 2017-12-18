@@ -341,5 +341,45 @@ Template.prototype = {
 			console.log(_this.currentPage)
 			_this.getPage();
 		}
+	},
+	//-----------------------------------绑定事件------------------------------------------
+	pageOnClick: function() {
+		var _this = this;
+		$('#btn-share').off('click').on('click', function() {
+			$('#modal-con').text('')
+			$('#modal-con').append('<div id="qrcode"></div>')
+			$('.modal-dialog').css({
+				'margin-top': '-100px'
+			})
+			var qrcode = new QRCode("qrcode")
+			console.log(window.location.href)
+			qrcode.makeCode(window.location.href)
+			$('#warn').modal('show');
+		})
+		$('#btn-print').off('click').on('click', function() {
+			$('#modal-con').text('')
+			$('#modal-con').append('联系XXX人员制定内容')
+			$('#warn').modal('show');
+		})
+		$('#btn-delete').off('click').on('click', function() {
+			console.log(_this.opts)
+			$.ajax({
+				type: 'post',
+				dataType: "json",
+				url: _this.opts.domain + _this.opts.removeOpusuri,
+				data: {
+					opusId: localStorage.opusId || _this.opts.opusId,
+					token: localStorage.token
+				}
+			}).done(function() {
+				$('#modal-con').text('')
+				$('#modal-con').append('删除成功')
+				$('#warn').modal('show');
+			}).fail(function() {
+				$('#modal-con').text('')
+				$('#modal-con').append('删除失败')
+				$('#warn').modal('show');
+			});
+		})
 	}
 };

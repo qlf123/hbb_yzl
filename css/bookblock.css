@@ -1,6 +1,7 @@
 .bb-bookblock {
 	width: 600px;
-	height: 700px;
+	height: 1000px;
+	max-height: 1200px;
 	overflow: hidden;
 	margin: 0 auto;
 	position: relative;
@@ -12,7 +13,6 @@
 	-moz-backface-visibility: hidden;
 	backface-visibility: hidden;
 }
-
 .bb-page {
 	position: absolute;
 	-webkit-transform-style: preserve-3d;
@@ -22,7 +22,6 @@
 	-moz-transition-property: -moz-transform;
 	transition-property: transform;
 }
-
 .bb-vertical .bb-page {
 	width: 50%;
 	height: 100%;

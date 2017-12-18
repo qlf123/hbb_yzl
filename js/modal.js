@@ -37,7 +37,7 @@ function delModal() {
 		'</div>');
 }
 //添加推出与继续编辑模态框
-function　 addModal() {
+function　addModal() {
 	$("body").append(
 		'<div  class="modal fade" id="yhx-title" tabindex="-1" role="dialog"  aria-hidden="true">' +
 		'<div class="modal-dialog" style="top:8rem;">' +
