@@ -1,7 +1,7 @@
 //获取模板具体页
 $(function() {
 	domain = configure();
-	//addModal();
+	addModal();
 	printModal();
 	//模板所有的加上拦截
 	//教师端作品制作不加拦截
@@ -63,11 +63,12 @@ $(function() {
 		//创建作品
 		delete localStorage.update;
 		delete localStorage.opusId;
-		if (localStorage.type == 4) {
-			opts.createUri = 'outeropus/create/teacher/opus';
-		} else if (localStorage.type == 3) {
-			opts.createUri = 'outeropus/create/parent/opus';
-		}
+		opts.createUri = 'outeropus/create/teacher/opus';
+		//if (localStorage.type == 4) {
+		//	opts.createUri = 'outeropus/create/teacher/opus';
+		//} else if (localStorage.type == 3) {
+		//	opts.createUri = 'outeropus/create/parent/opus';
+		//}
 	}
 	var temp = new Template(opts);
 	temp.getPage();

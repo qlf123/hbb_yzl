@@ -783,7 +783,6 @@ Template.prototype = {
 				_this.addSend('发送');
 			}
 		}
-
 	}, //添加发送按钮
 	addSend: function(btnWord) {
 		var _this = this;
