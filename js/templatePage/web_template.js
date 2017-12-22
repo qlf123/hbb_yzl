@@ -381,5 +381,8 @@ Template.prototype = {
 				$('#warn').modal('show');
 			});
 		})
+		$('#btn-edit').off('click').on('click', function() {
+			
+		})
 	}
 };

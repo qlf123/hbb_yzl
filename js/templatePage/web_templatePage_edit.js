@@ -45,31 +45,54 @@ $(function() {
 		albUrl: 'hbbclient/parent/read/album',
 		photoSzie: 28,
 		tempuri: 'outertemplate/read/pageinfos',
-		opusuri: 'outeropus/read/pageinfos'
+		opusuri: 'outeropus/read/pageinfos',
+		updateUri: 'outeropus/update/pageinfos', // 更新作品
+		createUri: 'outeropus/create/teacher/opus'  // 教师创建作品
 	};
 	opts.redomain = opts.domain.split('j')[0];
-	//模板
-	//教师端
-	if (localStorage.update) {
-		//更新作品
-		var opusId = location.search;
-		opts.opusId = localStorage.opusId = opusId.substring(opusId.lastIndexOf('=') + 1, opusId.length);
-		//家长端:可以更新
-		if (localStorage.update == 1) {
-			opts.updateUri = 'outeropus/update/pageinfos';
-			localStorage.unread--;
+	var url=location.search;
+	function url2json(url){
+		var json={};
+		if(url.indexOf("?")!=-1) {
+			var str = url.substr(1);
+			var arr=str.split('&');
+			for (var i = 0; i < arr.length; i++) {
+				var arr2 = arr[i].split('=');
+				json[arr2[0]] = arr2[1];
+			}
 		}
-	} else {
-		//创建作品
-		delete localStorage.update;
-		delete localStorage.opusId;
-		opts.createUri = 'outeropus/create/teacher/opus';
-		//if (localStorage.type == 4) {
-		//	opts.createUri = 'outeropus/create/teacher/opus';
-		//} else if (localStorage.type == 3) {
-		//	opts.createUri = 'outeropus/create/parent/opus';
-		//}
+		return json;
 	}
+	var loginInfo = url2json(url);
+	if (loginInfo.opusId) {
+		opts.opusId = localStorage.opusId = loginInfo.opusId
+		localStorage.token = loginInfo.token
+	} else {
+		delete localStorage.opusId
+	}
+	//模板
+	// TODO:教师端
+	//if (localStorage.update) {
+	//	//更新作品
+	//	var opusId = location.search;
+	//	opts.opusId = localStorage.opusId = opusId.substring(opusId.lastIndexOf('=') + 1, opusId.length);
+	//	//家长端:可以更新
+	//	if (localStorage.update == 1) {
+	//		opts.updateUri = 'outeropus/update/pageinfos';
+	//		localStorage.unread--;
+	//	}
+	//} else {
+	//	//创建作品
+	//	delete localStorage.update;
+	//	delete localStorage.opusId;
+	//	opts.createUri = 'outeropus/create/teacher/opus';
+	//	//if (localStorage.type == 4) {
+	//	//	opts.createUri = 'outeropus/create/teacher/opus';
+	//	//} else if (localStorage.type == 3) {
+	//	//	opts.createUri = 'outeropus/create/parent/opus';
+	//	//}
+	//}
+
 	var temp = new Template(opts);
 	temp.getPage();
 	temp.pageOnClick();

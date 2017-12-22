@@ -111,6 +111,8 @@
 			width: 100%;
 			background: #fff;
 			height: 80px;
+			box-sizing: border-box;
+			padding: 15px;
 		}
 		.yhx-save-btn {
 			float: left;
@@ -124,6 +126,21 @@
 		}
 		#yhx-save-yes {
 			border-right: 1px solid #ddd;
+		}
+		#input {
+			text-align: center;
+			width: 300px;
+			height: 50px;
+			font-family: MyNewFont;
+			font-size: 16px;
+		}
+		#yhx-title-confirm {
+			text-align: center;
+			font-size: 18px;
+			font-family: MyNewFont;
+			color: #ff4f4f;
+			line-height: 50px;
+			margin-bottom: 0;
 		}
 	</style>
 </head>
@@ -174,7 +191,11 @@
 
 				</div>
 				<div id="upload">
-					111111111111
+					<!--<form action="http://testimage.hxkid.com:4869/upload?time=2015101314112&key=02d71a4d46303a8328869dad1ed31f1b" method="post" enctype="multipart/form-data" class="dropzone dropzone-file-area" id="my-dropzone">选择图片</form>-->
+					<form id="from" action="http://image.kids.andedu.net:4869/upload?time=2015101314112&key=02d71a4d46303a8328869dad1ed31f1b" method="post" enctype="multipart/form-data">
+						<input type="file" id="image" name="image" value="选择图片" accept="image/gif,image/jpeg,image/jpg,image/png,image/bmp">
+						<input type="submit" id="submit" value="提交"/>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -184,6 +205,7 @@
 	<script type="text/javascript" src="../src/web_rem.js"></script>
 	<script type="text/javascript" src="../js/web_modal.js"></script>
 	<script src="../src/jquery.min.js"></script>
+	<script src="../src/jquery.form.js"></script>
 	<script src="../src/bootstrap.min.js"></script>
 	<script src="../src/customParam.js"></script>
 	<script type="text/javascript" src="../js/tool/dialog.js"></script>
@@ -198,5 +220,23 @@
 	<script type="text/javascript" src="../js/templatePage/web_template_edit.js"></script>
 	<script type="text/javascript" src="../src/alb.draggable.js"></script>
 	<script type="text/javascript" src="../src/alb.resize.js"></script>
+	<script>
+//		var image = '';
+//		function selectImage(file){
+//			if(!file.files || !file.files[0]){
+//				return;
+//			}
+//			var reader = new FileReader();
+//			reader.onload = function(evt){
+//				console.log('111111')
+//				document.getElementById('image').src = evt.target.result;
+//				image = evt.target.result;
+//			}
+//			reader.readAsDataURL(file.files[0]);
+//		}
+		$(function() {
+
+		})
+	</script>
 </body>
 </html>

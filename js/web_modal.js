@@ -44,10 +44,10 @@ function　addModal() {
 		'<div class="modal-content" style="background-color:#f0efed;">' +
 		'<div class="modal-header">' +
 		'<button class="close" style="margin-top:-0.5rem;" aria-hidden="true" data-dismiss="modal">&times;</button>' +
-		'<input id="input" maxlength="7" style="margin-left:2rem;text-align:center;width:10rem;height:1.5rem;font-family: MyNewFont;font-size: 1rem;" placeholder="模板名称自定义">' +
+		'<input id="input" maxlength="7" placeholder="模板名称自定义">' +
 		'</div>' +
 		'<div class="modal-footer" style="padding:0;"><a id="fin" style="display:block;" data-dismiss="modal">' +
-		'<p id=""style="text-align:center;font-size:1rem;font-family:MyNewFont;color:#ff4f4f;">确认</p></a>' +
+		'<p id="yhx-title-confirm">确认</p></a>' +
 		'</div>' +
 		'</div>' +
 		'</div>' +
