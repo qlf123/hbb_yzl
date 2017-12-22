@@ -1,6 +1,5 @@
 //模板页
 function Template(opts) {
-	var _this = this;
 	this.opts = opts;
 	this.currentPage = 0;
 	this.obj; //页面数据
@@ -9,14 +8,12 @@ function Template(opts) {
 	this.heightop;
 	this.album = []; //保存页面数据
 	this.opus = [];
-	// TODO：web端不需要先选择图片
-	//if (!localStorage.opusId && localStorage.picnum != '0') {
-	//	this.photo = JSON.parse(localStorage.photo); //选择的图片
-	//	// console.log(this.photo);
-	//} else {
-	//	this.photo = [];
-	//}
-	this.photo = [];
+	if (!localStorage.opusId && localStorage.picnum != '0') {
+		this.photo = JSON.parse(localStorage.photo); //选择的图片
+		// console.log(this.photo);
+	} else {
+		this.photo = [];
+	}
 	this.indexOfImg = 0; //图片序数 
 	this.w; //相框宽
 	this.h; //相框高
@@ -42,88 +39,11 @@ function Template(opts) {
 	this.pic;
 	this.picSzie;
 	this.updateOpus = false; //更新作品
-	this.page = (function() {
-		var config = {
-				$bookBlock : $( '#bb-bookblock' ),
-				$navNext : $( '#bb-nav-next' ),
-				$navPrev : $( '#bb-nav-prev' ),
-				$navFirst : $( '#bb-nav-first' ),
-				$navLast : $( '#bb-nav-last' )
-			},
-			init = function() {
-				config.$bookBlock.bookblock( {
-					speed : 800,
-					shadowSides : 0.8,
-					shadowFlip : 0.7
-				} );
-				initEvents();
-			},
-			initEvents = function() {
-
-				var $slides = config.$bookBlock.children();
-
-				// add navigation events
-				config.$navNext.on( 'click touchstart', function() {
-					_this.loadAlbum();
-					config.$bookBlock.bookblock('update');
-					config.$bookBlock.bookblock('next');
-					return false;
-				} );
-
-				config.$navPrev.on( 'click touchstart', function() {
-					config.$bookBlock.bookblock( 'prev' );
-					return false;
-				} );
-
-				config.$navFirst.on( 'click touchstart', function() {
-					config.$bookBlock.bookblock( 'first' );
-					return false;
-				} );
-
-				config.$navLast.on( 'click touchstart', function() {
-					config.$bookBlock.bookblock( 'last' );
-					return false;
-				} );
-
-				// add swipe events
-				$slides.on( {
-					'swipeleft' : function( event ) {
-						config.$bookBlock.bookblock( 'next' );
-						return false;
-					},
-					'swiperight' : function( event ) {
-						config.$bookBlock.bookblock( 'prev' );
-						return false;
-					}
-				} );
-
-				// add keyboard events
-				$( document ).keydown( function(e) {
-					var keyCode = e.keyCode || e.which,
-						arrow = {
-							left : 37,
-							up : 38,
-							right : 39,
-							down : 40
-						};
-
-					switch (keyCode) {
-						case arrow.left:
-							config.$bookBlock.bookblock( 'prev' );
-							break;
-						case arrow.right:
-							config.$bookBlock.bookblock( 'next' );
-							break;
-					}
-				} );
-			};
-		return { init : init };
-	})();
-	this.rate;
-	this.addPhoto = [];
 }
 
 Template.prototype = {
+
+
 	//-----------------------------------获取页面----------------------------------------
 	getPage: function() {
 		var _this = this;
@@ -160,7 +80,7 @@ Template.prototype = {
 		}).done(function(obj) {
 			//数据
 			_this.obj = obj.data.content;
-			console.log('获取页面数据-----------', obj.data.content);
+			// console.log(obj.data.content);
 			_this.totalPages = obj.data.totalPages;
 			$(".loading-small").remove();
 			_this.createPages();
@@ -170,13 +90,14 @@ Template.prototype = {
 	},
 	//------------------------------------创建页面--------------------------------------
 	createPages: function() {
+		// console.log(this.obj);
 		var length = this.obj.length;
 		for (var i = 0; i < length; i++) {
 			this.album.push(this.obj[i]);
 			// console.log(this.album);
 			this.pageId = 'temp-' + this.obj[i].pageIndex;
-			var div = '<div class="temp-page bb-item"><div id="' + this.pageId + '"></div></div>';
-			console.log('要渲染的页面', this.obj[i].pageIndex, this.obj[i]);
+			var div = '<div class="temp-page"><div id="' + this.pageId + '"></div></div>';
+			// console.log(this.obj.content[i].pageIndex);
 			$(this.opts.container).append(div);
 			this.eachPage(this.obj[i]);
 		}
@@ -194,6 +115,7 @@ Template.prototype = {
 							// 背景
 							var url = this.opts.zimgUri + layer.uri;
 							this.setbgcss(url, layer);
+
 						}
 						break;
 					case 2:
@@ -271,7 +193,6 @@ Template.prototype = {
 		});
 	},
 	setFont: function(layer, pageIndex) {
-		var _this = this
 		if (layer.fontContent.indexOf('XX') >= 0) {
 			layer.fontContent = layer.fontContent.replace('XX', localStorage.studentName);
 		}
@@ -281,11 +202,11 @@ Template.prototype = {
 
 		$('#' + this.pageId).append('<p class="' + pageIndex + layer.name + '">' + layer.fontContent + '</p>');
 		$("." + pageIndex + layer.name).css({
-			'top': (layer.top + layer.fontSize / 3) * _this.rate + 'rem',
-			'left': layer.left * _this.rate + 'rem',
+			'top': layer.top + layer.fontSize / 3,
+			'left': layer.left,
 			'position': 'absolute',
 			'z-index': 10 + layer.zIndex,
-			'font-size': layer.fontSize * _this.rate + 'rem',
+			'font-size': layer.fontSize,
 			'font-family': 'birthday',
 			'color': layer.fontColor,
 			'line-height': 0
@@ -297,38 +218,58 @@ Template.prototype = {
 		var frameWidth = $(window).width(),
 			psdWidth = layer.width,
 			psdHeight = layer.height,
-			rate = 16 / layer.width,
+			rate = layer.width / frameWidth,
 			//rate = frameWidth / layer.width,
 			marginLeft = layer.width / rate - layer.width,
 			margintop = layer.height / rate - layer.height;
-		_this.rate = rate;
 		this.heightop = margintop / 2;
-		$('#' + this.pageId).css({
-			'background-image': 'url(' + url + '?f=jpg&w=640&q=90)',
-			'background-repeat': 'no-repeat',
-			'width': layer.width * rate + 'rem',
-			'height': layer.height * rate + 'rem',
-			'background-size': '100% 100%'
-		});
+		if (browser.versions.iPhone || browser.versions.iPad || browser.versions.ios) {
+			$('#' + this.pageId).css({
+				'background-image': 'url(' + url + '?f=jpg&w=640&q=90)',
+				'background-repeat': 'no-repeat',
+				'width': layer.width,
+				'height': layer.height,
+				'background-size': '100% 100%',
+				'transform': 'scale(' + 1 / rate + ')',
+				'-moz-transform': 'scale(' + 1 / rate + ')',
+				'-webkit-transform': 'scale(' + 1 / rate + ')',
+				'-o-transform': 'scale(' + 1 / rate + ')',
+				'margin-left': marginLeft / 2,
+				'margin-top': margintop / 2
+			});
+		}else {
+			$('#' + this.pageId).css({
+				'background-image': 'url(' + url + '?f=jpg&w=640&q=90)',
+				'background-repeat': 'no-repeat',
+				'width': layer.width,
+				'height': layer.height,
+				'background-size': '100% 100%',
+				'transform': 'translate3d(0px, 0px, 0px) scale(' + 1 / rate + ')',
+				'-moz-transform': 'translate3d(0px, 0px, 0px) scale(' + 1 / rate + ')',
+				'-webkit-transform': 'translate3d(0px, 0px, 0px) scale(' + 1 / rate + ')',
+				'-o-transform': 'translate3d(0px, 0px, 0px) scale(' + 1 / rate + ')',
+				'margin-left': marginLeft / 2,
+				'margin-top': margintop / 2
+			});
+		}
 		$('#' + this.pageId).parent().css({
-				'height': layer.height * rate + 'rem'
-		})
+			'height': layer.height / rate
+		});
 	},
 	//设置每页的样式
 	eachSetcss: function(layer, pageIndex) {
-		console.log('设置每页样式', layer)
 		var _this = this;
 		var url = layer.uri;
 		if (layer.type == 2) {
 			url = layer.maskUri;
 		}
-		$('#' + this.pageId).append('<img  class="' + pageIndex + layer.name + '" src="' + this.opts.zimgUri + url + '?f=png&w=600">');
+		$('#' + this.pageId).append('<img  class="' + pageIndex + layer.name + '" src="' + this.opts.zimgUri + url + '?f=png&w=640">');
 		if (layer.type != 2) {
 			$("." + pageIndex + layer.name).css({
-				'top': layer.top * _this.rate + 'rem',
-				'left': layer.left * _this.rate + 'rem',
-				'width': layer.width * _this.rate + 'rem',
-				'height': layer.height * _this.rate + 'rem',
+				'top': layer.top,
+				'left': layer.left,
+				'width': layer.width,
+				'height': layer.height,
 				'position': 'absolute',
 				'z-index': 10 + layer.zIndex
 			});
@@ -343,10 +284,10 @@ Template.prototype = {
 				$('.' + pageIndex + layer.name).attr('src', _this.opts.picurl + layer.content.uri + '?f=png&w=640');
 				this.angel = layer.content.rotate;
 				$("." + pageIndex + layer.name).css({
-					'top': layer.content.top * _this.rate + 'rem',
-					'left': layer.content.left * _this.rate + 'rem',
-					'width': layer.content.offsetWidth * _this.rate + 'rem',
-					'height': layer.content.offsetHeight * _this.rate + 'rem',
+					'top': layer.content.top,
+					'left': layer.content.left,
+					'width': layer.content.offsetWidth,
+					'height': layer.content.offsetHeight,
 					'z-index': 1,
 					'position': 'absolute'
 				});
@@ -364,16 +305,16 @@ Template.prototype = {
 
 			$("." + pageIndex + layer.name).wrap('<div id="frm' + pageIndex + layer.name + '" />').promise().done(function() {
 				$('#frm' + pageIndex + layer.name).css({
-					'width': layer.width * _this.rate + 'rem',
-					'height': layer.height * _this.rate + 'rem',
+					'width': layer.width,
+					'height': layer.height,
 					'overflow': 'hidden',
-					'top': layer.top * _this.rate + 'rem',
+					'top': layer.top,
 					'position': 'absolute',
-					'left': layer.left * _this.rate + 'rem',
-					'webkit-mask': 'url(' + _this.opts.zimgUri + url + '?f=png&w=600)',
-					'mask-image': 'url(' + _this.opts.zimgUri + url + '?f=png&w=600)',
-					'-webkit-mask-image': 'url(' + _this.opts.zimgUri + url + '?f=png&w=600)',
-					'-webkit-mask': 'url(' + _this.opts.zimgUri + url + '?f=png&w=600)',
+					'left': layer.left,
+					'webkit-mask': 'url(' + _this.opts.zimgUri + url + '?f=png&w=640)',
+					'mask-image': 'url(' + _this.opts.zimgUri + url + '?f=png&w=640)',
+					'-webkit-mask-image': 'url(' + _this.opts.zimgUri + url + '?f=png&w=640)',
+					'-webkit-mask': 'url(' + _this.opts.zimgUri + url + '?f=png&w=640)',
 					'-webkit-mask-size': '100%',
 					'background-repeat': 'no-repeat',
 					'z-index': layer.zIndex
@@ -407,9 +348,9 @@ Template.prototype = {
 						_this.h = layer.height;
 					}
 					$('#rotate,#replace').remove();
-					$frm.after('<img id="rotate" src="../images/icon_rotate.png">' +
-						'<img id="replace" src="../images/icon_replace.png">');
-					_this.setStyle(layer , $frm, "." + pageIndex + layer.name, pageIndex);
+					$frm.after('<img id="rotate" src="../images/teacher_14.png">' +
+						'<img id="replace" src="../images/teacher_17.png">');
+					_this.setStyle(layer, $frm, "." + pageIndex + layer.name);
 				});
 			}
 
@@ -458,8 +399,6 @@ Template.prototype = {
 	//-------------------------------模板图片初始化--------------------------------------
 	//设置替换图片样式
 	setImgCss: function(frame, img, obj) {
-		var _this = this
-		console.log('替换图片-----', obj.url)
 		this.w = frame.width;
 		this.h = frame.height;
 		this.a = obj.width;
@@ -490,17 +429,17 @@ Template.prototype = {
 	},
 	//设置目标图片样式
 	targetImg: function(layer, img, obj) {
-		console.log('设置目标图片样式')
 		var _this = this;
 		//uri已经存在时
 		if (layer.content) {
 			var uri = layer.content.uri;
 		}
+
 		$(img).css({
-			'top': this.t*_this.rate+'rem',
-			'left': this.l*_this.rate+'rem',
-			'width': this.a*_this.rate+'rem',
-			'height': this.b*_this.rate+'rem',
+			'top': this.t,
+			'left': this.l,
+			'width': this.a,
+			'height': this.b,
 			'position': 'absolute',
 			'z-index': 10
 		});
@@ -521,8 +460,7 @@ Template.prototype = {
 	},
 	//------------------------------------------------------------------------------------
 	//设置旋转与替换的样式
-	setStyle: function(layer, obj, objClass, pageIndex) {
-		console.log('设置旋转与替换的样式', layer)
+	setStyle: function(layer, obj, objClass) {
 		var _this = this;
 		//旋转按钮
 		$('#rotate').css({
@@ -555,21 +493,19 @@ Template.prototype = {
 		});
 		//替换图片
 		$('#replace').off('click').on('click', function() {
-			_this.imgReplace(layer, objClass, pageIndex);
+			_this.imgReplace(layer, objClass);
 		});
 	},
 	//-------------------------------------替换图片---------------------------------------
-	imgReplace: function(layer, objClass, pageIndex) {
-		console.log('替换图片', layer)
+	imgReplace: function(layer, objClass) {
 		var _this = this;
-		//if (localStorage.type == 3) {
-		//	var url = this.opts.albUrl;
-		//} else if (localStorage.type == 4) {
-		//	var url = this.opts.timeLine;
-		//} else {
-		//	console.log('出现其他类型');
-		//}
-		var url = this.opts.timeLine;  // localStorage.type 4:教师，3：家长
+		if (localStorage.type == 3) {
+			var url = this.opts.albUrl;
+		} else if (localStorage.type == 4) {
+			var url = this.opts.timeLine;
+		} else {
+			console.log('出现其他类型');
+		}
 		$.ajax({
 			type: 'get',
 			url: this.opts.domain + url,
@@ -579,41 +515,34 @@ Template.prototype = {
 				token: localStorage.token
 			}
 		}).done(function(obj) {
-			_this.year = obj.data;
-			//if (localStorage.type == 3) {
-			//	_this.albumId = obj.data;
-			//} else if (localStorage.type == 4) {
-			//	_this.year = obj.data;
-			//} else {
-			//	console.log('出现其他类型');
-			//}
-			_this.getPhoto(layer, objClass, pageIndex);
+			if (localStorage.type == 3) {
+				_this.albumId = obj.data;
+			} else if (localStorage.type == 4) {
+				_this.year = obj.data;
+			} else {
+				console.log('出现其他类型');
+			}
+			_this.getPhoto(layer, objClass);
 		}).fail(function() {
 			console.log('没有图片');
 		});
 	},
 	//获取图片
-	getPhoto: function(layer, objClass, pageIndex) {
+	getPhoto: function(layer, objClass) {
 		var _this = this;
-		console.log('获取图片', layer)
-		//if (localStorage.type == 4) {
-		//	var data = $.customParam({
-		//		year: this.year[0],
-		//		token: localStorage.token
-		//	});
-		//	var _url = this.opts.teUrl;
-		//} else if (localStorage.type == 3) {
-		//	var data = $.customParam({
-		//		albumId: this.albumId._id,
-		//		token: localStorage.token
-		//	});
-		//	var _url = this.opts.paUrl;
-		//}
-		var data = $.customParam({
-			year: this.year[0],
-			token: localStorage.token
-		});
-		var _url = this.opts.teUrl;
+		if (localStorage.type == 4) {
+			var data = $.customParam({
+				year: this.year[0],
+				token: localStorage.token
+			});
+			var _url = this.opts.teUrl;
+		} else if (localStorage.type == 3) {
+			var data = $.customParam({
+				albumId: this.albumId._id,
+				token: localStorage.token
+			});
+			var _url = this.opts.paUrl;
+		}
 		$.ajax({
 			type: 'get',
 			url: this.opts.domain + _url,
@@ -637,14 +566,13 @@ Template.prototype = {
 			}
 			_this.pic = obj.data;
 			_this.picSzie = _this.pic.length;
-			_this.createPicList(layer, objClass, pageIndex);
+			_this.createPicList(layer, objClass);
 		}).fail(function() {
 			console.log('没有图片');
 		});
 	},
 	//创建图片列表：以模态框形式显示
-	createPicList: function(layer, objClass, pageIndex) {
-		console.log('创建图片列表', layer)
+	createPicList: function(layer, objClass) {
 		var _this = this;
 		$('.yhx-show').remove();
 		// alert('我擦勒');
@@ -652,7 +580,7 @@ Template.prototype = {
 		//------------------------------------------------------------------------------
 		for (var i = 0, len = this.picSzie; i < len; i++) {
 			div += '<div class="photoList" id="photo-' + i + '">' +
-				'<img class="photoImg" data-height="' + _this.pic[i].imageLength + '"data-width="' + _this.pic[i].imageWidth + '" data-uri="' + this.pic[i].path + '" src="' + this.opts.picurl + this.pic[i].path + '?f=png&w=118&h=118">' +
+				'<img class="photoImg" data-height="' + _this.pic[i].imageLength + '"data-width="' + _this.pic[i].imageWidth + '" data-uri="' + this.pic[i].path + '" src="' + this.opts.picurl + this.pic[i].path + '?f=png&w=120&h=120">' +
 				'</div>';
 		}
 		div += '</div>';
@@ -685,14 +613,7 @@ Template.prototype = {
 					width: $(this).attr('data-width'),
 					height: $(this).attr('data-height')
 				};
-				console.log(layer)
-				console.log('objClass-', objClass)
 				layer.content.uri = $(this).attr('data-uri');
-				console.log('是否存在数组中', $.inArray(objClass, _this.addPhoto))
-				if ($.inArray(objClass, _this.addPhoto) == -1) {
-					_this.addPhoto.push(objClass)
-				}
-				console.log(_this.addPhoto)
 				_this.setImgCss(layer, objClass, objImg); //替换图片之后初始化设置图片样式
 				$('.yhx-show').remove();
 				if (localStorage.type == 3 && localStorage.update) {
@@ -700,46 +621,9 @@ Template.prototype = {
 				}
 				setTimeout(function() {
 					$('#yhx-photoList').modal('hide');
-				}, 200);
+				}, 100);
 			});
 		});
-		$('#submit').off('click').on('click', function() {
-			$("#from").ajaxSubmit(function(message) {
-				// 对于表单提交成功后处理，message为提交页面saveReport.htm的返回内容
-				console.log(message)
-				$("<div />").attr("id", "md5").hide().html(message).appendTo("body");
-				var md5 = ($("#md5 h1").html().replace("MD5: ", ""));
-				delete $(objClass).attr('src');
-				$(objClass).attr('src', _this.opts.picurl + md5 + '?f=png&w=360');
-				var img = new Image();
-				img.src = _this.opts.picurl + md5;
-				if (layer.content == null && _this.indexOfImg >= _this.photo.length) {
-					//模板中选择图片过少
-					layer.content = new Object();
-					$(objClass).css({
-						'display': 'block'
-					});
-				}
-				layer.content.uri = md5;
-				console.log('是否存在数组中', $.inArray(objClass, _this.addPhoto))
-				if ($.inArray(objClass, _this.addPhoto) == -1) {
-					_this.addPhoto.push(objClass)
-				}
-				img.onload = function () {
-					alert(img.width)
-					var objImg = {
-						url: md5,
-						width: img.width,
-						height: img.height
-					};
-					_this.setImgCss(layer, objClass, objImg);
-				}
-				setTimeout(function() {
-					$('#yhx-photoList').modal('hide');
-				}, 200);
-			});
-			return false; // 必须返回false，否则表单会自己再做一次提交操作，并且页面跳转
-		})
 	},
 	//-------------------------------------旋转图片---------------------------------------
 	rotate: function(layer, objClass) {
@@ -829,20 +713,20 @@ Template.prototype = {
 		var _this = this;
 		if (_this.angel % 180) {
 			$(objClass).css({
-				'left': _this.l*_this.rate+'rem',
-				'top': _this.t*_this.rate+'rem',
-				'width': _this.b*_this.rate+'rem',
-				'height': _this.a*_this.rate+'rem'
+				'left': _this.l,
+				'top': _this.t,
+				'width': _this.b,
+				'height': _this.a
 			});
 			layer.content.offsetHeight = _this.a;
 			layer.content.offsetWidth = _this.b;
 			// console.log(_this.b / 2 + _this.l, _this.a / 2 + _this.t);
 		} else {
 			$(objClass).css({
-				'left': _this.l*_this.rate+'rem',
-				'top': _this.t*_this.rate+'rem',
-				'width': _this.a*_this.rate+'rem',
-				'height': _this.b*_this.rate+'rem'
+				'left': _this.l,
+				'top': _this.t,
+				'width': _this.a,
+				'height': _this.b
 			});
 			layer.content.offsetHeight = _this.b;
 			layer.content.offsetWidth = _this.a;
@@ -899,17 +783,7 @@ Template.prototype = {
 				_this.addSend('发送');
 			}
 		}
-
 	}, //添加发送按钮
-	loadAlbum: function() {
-		var _this = this;
-		console.log('总数----------' + _this.totalPages)
-		if (_this.currentPage < _this.totalPages - 1) {
-			_this.currentPage++;
-			console.log(_this.currentPage)
-			_this.getPage();
-		}
-	}, //翻书加载
 	addSend: function(btnWord) {
 		var _this = this;
 		var send = '<div class = "temp-send" >' +
@@ -1131,6 +1005,10 @@ Template.prototype = {
 	createTeOpus: function() {
 		var _this = this;
 		var _title = $('#input').val();
+		if (!_title) {
+			_title = localStorage.title;
+		}
+		// console.log(_title);
 		for (var i = 0; i < this.album.length; i++) {
 			if (this.album[i].id) {
 				this.album[i].templatePageId = this.album[i].id;
@@ -1143,6 +1021,9 @@ Template.prototype = {
 				}
 			}
 		}
+
+		$('#yhx-bear').modal('show');
+
 		var jsonstu = JSON.parse(localStorage.stuList);
 		for (var i = 0; i < jsonstu.length; i++) {
 			var json = jsonstu[i].birthday;
@@ -1151,30 +1032,42 @@ Template.prototype = {
 			str = str.replace('日', '');
 			jsonstu[i].birthday = str;
 		}
-		if (_title) {
-			$.ajax({
-				type: 'post',
-				dataType: 'json',
-				url: this.opts.domain + this.opts.createUri,
-				data: $.customParam({
-					opusVo: {
-						templateId: JSON.parse(localStorage.templateId),
-						title: _title,
-						pages: this.album
-					},
-					students: jsonstu,
-					token: localStorage.token
-				})
-			}).done(function(obj) {
-				console.log(obj, '创建作品成功了！');
-				$('#yhx-success').modal('show');
-				window.location.href = '/page/web_studentlist.html?token='+ localStorage.token +'&temId='+ localStorage.templatedId +'&pictureCount=' + localStorage.pictureCount
-			}).fail(function(obj) {
-				console.log(obj.msg, '创建作品出错');
-			});
-		} else {
-			$('#yhx-title').modal('show');
-		}
+
+		$.ajax({
+			type: 'post',
+			dataType: 'json',
+			url: this.opts.domain + this.opts.createUri,
+			data: $.customParam({
+				opusVo: {
+					templateId: JSON.parse(localStorage.templateId),
+					title: _title,
+					pages: this.album
+				},
+				students: jsonstu,
+				token: localStorage.token
+			})
+		}).done(function(obj) {
+			console.log(obj, '创建作品成功了！');
+			// $('#yhx-bear').modal('hide');
+			//delete localStorage.templateId;
+			$('#yhx-success').modal('show');
+			//返回首页电脑版
+			// setTimeout(function() {
+			// 	window.location.href = _this.opts.redomain + 'hbb_yzl_frontend/yhx_indexte.html?userId=' + localStorage.userId + '&outerPersonId=' + localStorage.outerPersonId +
+			// 		'&name=' + localStorage.name + '&outerToken=' + localStorage.outerToken + '&schoolId=' + localStorage.schoolId + '&classId=' + localStorage.classId +
+			// 		'&className=' + localStorage.className + '&classType=' + localStorage.classType + '&avatar=' + localStorage.avatar + '&gender=' + localStorage.gender +
+			// 		'&birthday=' + jsonstu + '&userType=' + localStorage.userType;
+			// }, 1000);
+			//返回首页手机版
+			setTimeout(function() {
+				window.location.href = _this.opts.redomain + 'hbb_yzl/yhx_indexte.html?userId=' + localStorage.userId + '&outerPersonId=' + localStorage.outerPersonId +
+					'&name=' + localStorage.name + '&outerToken=' + localStorage.outerToken + '&schoolId=' + localStorage.schoolId + '&classId=' + localStorage.classId +
+					'&className=' + localStorage.className + '&classType=' + localStorage.classType + '&avatar=' + localStorage.avatar + '&gender=' + localStorage.gender +
+					'&birthday=' + jsonstu + '&userType=' + localStorage.userType;
+			}, 1000);
+		}).fail(function(obj) {
+			alert(obj.msg, '创建作品出错');
+		});
 	},
 	//------------------------------------创建家长作品------------------------------------
 	createPaOpus: function() {
@@ -1268,7 +1161,8 @@ Template.prototype = {
 		$.ajax({
 			type: 'post',
 			dataType: 'json',
-			url: this.opts.domain + this.opts.updateUri,
+			//url: this.opts.domain + this.opts.updateUri,
+			url: this.opts.domain + 'outeropus/update/pageinfos',
 			data: $.customParam({
 				pages: this.album,
 				token: localStorage.token
@@ -1276,25 +1170,24 @@ Template.prototype = {
 		}).done(function(obj) {
 			console.log(obj, '更新作品成功了！');
 			$('#yhx-success').modal('show');
-			window.location.href = '/page/web_templatepage.html?opusId='+ localStorage.opusId +'&token='+ localStorage.token +'&temId=teacher'
-			//TODO：如果点击了打印按钮，判断是否跳出打印模态框
-			//if (localStorage.printFlag == 1) {
-			//	$('#yhx-bear').modal('hide');
-			//	$('#yhx-success').modal('hide');
-			//	if (localStorage.orderId == undefined) {
-			//		_this.recordPrint(_this.opts);
-			//	}
-			//	_this.showPrint(_this.opts);
-			//}
-			//if (localStorage.printFlag != 1) {
-			//	//回退到主界面
-			//	delete localStorage.orderId;
-			//	delete localStorage.opusId;
-			//	delete localStorage.update;
-			//	delete localStorage.printFlag;
-			//	delete localStorage.title;
-			//	window.history.back();
-			//}
+			//如果点击了打印按钮，判断是否跳出打印模态框
+			if (localStorage.printFlag == 1) {
+				$('#yhx-bear').modal('hide');
+				$('#yhx-success').modal('hide');
+				if (localStorage.orderId == undefined) {
+					_this.recordPrint(_this.opts);
+				}
+				_this.showPrint(_this.opts);
+			}
+			if (localStorage.printFlag != 1) {
+				//回退到主界面
+				delete localStorage.orderId;
+				delete localStorage.opusId;
+				delete localStorage.update;
+				delete localStorage.printFlag;
+				delete localStorage.title;
+				window.history.back();
+			}
 		}).fail(function(obj) {
 			alert(obj.msg, '更新作品失败');
 		});
@@ -1356,50 +1249,5 @@ Template.prototype = {
 		}).fail(function(obj) {
 			alert(obj.msg, '更新作品标题失败');
 		});
-	},
-	//-----------------------------------绑定事件------------------------------------------
-	pageOnClick: function() {
-		var _this = this;
-		$('#btn-share').off('click').on('click', function() {
-			$('#modal-con').text('')
-			$('#modal-con').append('<div id="qrcode"></div>')
-			$('.modal-dialog').css({
-				'margin-top': '-100px'
-			})
-			var qrcode = new QRCode("qrcode")
-			console.log(window.location.href)
-			qrcode.makeCode(window.location.href)
-			$('#warn').modal('show');
-		})
-		$('#btn-print').off('click').on('click', function() {
-			$('#modal-con').text('')
-			$('#modal-con').append('联系XXX人员制定内容')
-			$('#warn').modal('show');
-		})
-		//点击保存
-		$('#btn-save').off('click').on('click', function() {
-			if (!localStorage.opusId) {
-				// 创建
-				if (_this.addPhoto.length < parseInt(localStorage.pictureCount)) {
-					$('#yhx-save-prompt').modal('show')
-				}
-			} else {
-				// 更新
-				_this.updatePaOpus()
-			}
-		})
-		//保存-点击是
-		$('#yhx-save-yes').off('click').on('click', function() {
-			$('#yhx-save-prompt').modal('hide')
-			$('#yhx-title').modal('show');
-		})
-		//保存-点击否
-		$('#yhx-save-no').off('click').on('click', function() {
-			$('#yhx-save-prompt').modal('hide')
-		})
-		// 标题点击确定->保存
-		$('#yhx-title-confirm').off('click').on('click', function() {
-			_this.createTeOpus()
-		})
 	}
 };
